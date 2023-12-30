@@ -30,15 +30,32 @@ const updateJurusan = (body, id) => {
     return dbPool.execute(SQLQuery, values);
 }
 
-const deleteJurusan = (id) => {
-    const SQLQuery = `DELETE FROM jurusan WHERE id = ${id} `
-    return dbPool.execute(SQLQuery)
+const getJurusanByName = async(nama) => {
+    try {
+        const [ hasil ] = await dbPool.query(`SELECT * FROM jurusan WHERE nama = ?`, [nama])
+        return hasil
+    } catch (error) {
+        console.error('Error in getJurusanByName: ', error)
+        throw error
+    }
+}
+
+const deleteJurusan = async(id) => {
+    try {
+        await dbPool.query('DELETE FROM jurusan WHERE id = ?', [id]);
+    } catch (error) {
+        console.error('Error in deleteJurusan:', error);
+        throw error;
+    }
+    // const SQLQuery = `DELETE FROM jurusan WHERE id = ${id} `
+    // return dbPool.execute(SQLQuery)
 }
 
 module.exports = {
     getAllJurusan,
     getJurusanById,
     addJurusan,
+    getJurusanByName,
     updateJurusan,
     deleteJurusan
 }
