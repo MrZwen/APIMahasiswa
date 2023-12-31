@@ -17,8 +17,9 @@ const getAllJurusan = async(req, res) => {
 
 const getJurusanById = async(req, res) => {
     const id = req.params.id
+
     try {
-        const jurusan = await jurusanModels.getJurusanById(id);
+        const jurusan = await jurusanModels.getJurusanById(id)
 
         if (jurusan.length > 0) {
             res.json({
@@ -28,13 +29,13 @@ const getJurusanById = async(req, res) => {
         } else {
             res.status(404).json({
                 message: `Data jurusan Dengan ID:${id} tidak ditemukan, tolong masukkan data dengan benar!`,
-            });
+            })
         }
     } catch (error) {
         res.status(500).json({
             message: 'Server error!',
             serverMessage: error.message || 'Internal server error.',
-        });
+        })
     }
 }
 
@@ -75,6 +76,15 @@ const updateJurusan = async(req, res) => {
         })
     }
     try {
+        const jurusanAda = await jurusanModels.getJurusanByName(body.nama, id)
+
+        if (jurusanAda.length > 0) {
+            return res.status(400).json({
+                message: `Jurusan dengan nama ${body.nama} sudah ada, silakan pilih nama lain.`,
+                data: null,
+            })
+        }
+
         await jurusanModels.updateJurusan(body, id)
         res.status(201).json({
             message : `UPDATE jurusan dengan ID:${id} berhasil!`,
@@ -102,7 +112,7 @@ const deleteJurusan = async(req, res) => {
         } 
         await jurusanModels.deleteJurusan(id)
         res.json({
-            message : `Deleted jurusan dengan ID:${id} success!`,
+            message : `Deleted jurusan dengan ID:${id} sukses!`,
             data : null
         })
     } catch (error) {

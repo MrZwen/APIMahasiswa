@@ -5,9 +5,14 @@ const getAllJurusan = () => {
     return dbPool.execute(SQLQuery)
 }
 
-const getJurusanById = (id) => {
-    const SQLQuery = `SELECT * FROM jurusan WHERE id = ${id}`
-    return dbPool.execute(SQLQuery)
+const getJurusanById = async(id) => {
+    try {
+        const result = await dbPool.query('SELECT * FROM jurusan WHERE id = ?', [id]);
+        return result[0];
+    } catch (error) {
+        console.error('Error in getJurusanById:', error);
+        throw error;
+    }
 }
 
 const addJurusan = (body) => {
