@@ -5,9 +5,15 @@ const getAllMahasiswa = () => {
     return dbPool.execute(SQLQuery)
 }
 
-const getMahasiswaByNim = (nim) => {
-    const SQLQuery = `SELECT * FROM mahasiswa WHERE nim = ${nim}`
-    return dbPool.execute(SQLQuery)
+const getMahasiswaByNim = async (nim) => {
+    try {
+        const SQLQuery = `SELECT * FROM mahasiswa WHERE nim = ?`
+        const [ mahasiswa ] = await dbPool.execute(SQLQuery, [nim])
+        return mahasiswa
+    } catch (error) {
+        console.error('Error in getMahasiswaByNim:', error)
+        throw error
+    }
 }
 
 const addMahasiswa = (body) => {
@@ -31,9 +37,13 @@ const updateMahasiswa = (body, nim) => {
     return dbPool.execute(SQLQuery, values);
 };
 
-const deleteMahasiswa = (nim) => {
-    const SQLQuery = `DELETE FROM mahasiswa WHERE nim = ${nim} `
-    return dbPool.execute(SQLQuery)
+const deleteMahasiswa = async(nim) => {
+    try {
+        await dbPool.query('DELETE FROM mahasiswa WHERE nim = ?', [nim]);
+    } catch (error) {
+        console.error('Error in deleteJurusan:', error);
+        throw error;
+    }
 }
 
 module.exports = {

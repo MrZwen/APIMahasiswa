@@ -5,9 +5,14 @@ const getAllProdi = () => {
     return dbPool.execute(SQLQuery)
 }
 
-const getProdiById = (id) => {
-    const SQLQuery = `SELECT * FROM prodi WHERE id = ${id}`
-    return dbPool.execute(SQLQuery)
+const getProdiById = async(id) => {
+    try {
+        const result = await dbPool.query('SELECT * FROM prodi WHERE id = ?', [id]);
+        return result[0];
+    } catch (error) {
+        console.error('Error in getProdiById:', error);
+        throw error;
+    }
 }
 
 const addProdi = (body) => {
@@ -31,9 +36,23 @@ const updateProdi = (body, id) => {
     return dbPool.execute(SQLQuery, values);
 }
 
-const deleteProdi = (id) => {
-    const SQLQuery = `DELETE FROM prodi WHERE id = ${id} `
-    return dbPool.execute(SQLQuery)
+const getProdiByName = async(nama) => {
+    try {
+        const [ hasil ] = await dbPool.query(`SELECT * FROM prodi WHERE nama = ?`, [nama])
+        return hasil
+    } catch (error) {
+        console.error('Error in getJurusanByName: ', error)
+        throw error
+    }
+}
+
+const deleteProdi = async(id) => {
+    try {
+        await dbPool.query('DELETE FROM prodi WHERE id = ?', [id]);
+    } catch (error) {
+        console.error('Error in deleteProdi:', error);
+        throw error;
+    }
 }
 
 
@@ -41,6 +60,7 @@ module.exports = {
     getAllProdi,
     getProdiById,
     addProdi,
+    getProdiByName,
     updateProdi,
     deleteProdi
 }

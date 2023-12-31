@@ -52,8 +52,6 @@ const deleteJurusan = async(id) => {
         console.error('Error in deleteJurusan:', error);
         throw error;
     }
-    // const SQLQuery = `DELETE FROM jurusan WHERE id = ${id} `
-    // return dbPool.execute(SQLQuery)
 }
 
 module.exports = {

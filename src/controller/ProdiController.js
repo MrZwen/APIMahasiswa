@@ -18,7 +18,7 @@ const getAllProdi = async(req, res) => {
 const getProdiById = async(req, res) => {
     const id = req.params.id
     try {
-        const [prodi] = await prodiModels.getProdiById(id)
+        const prodi = await prodiModels.getProdiById(id)
 
         if (prodi.length > 0) {
             res.json({
@@ -27,7 +27,7 @@ const getProdiById = async(req, res) => {
             });
         } else {
             res.status(404).json({
-                message: 'Prodi tidak ditemukan, tolong masukkan data dengan benar!'
+                message: `Data Prodi Dengan ID:${id} tidak ditemukan, tolong masukkan data dengan benar!`,
             });
         }
     } catch (error) {
@@ -46,6 +46,12 @@ const addProdi = async(req, res) => {
         })
     }
     try {
+    const prodiAda = await prodiModels.getProdiByName(body.nama)
+    if(prodiAda.length > 0){
+        return res.status(400).json({
+            message: `Prodi dengan Nama: ${body.nama} sudah ada, silahkan masukkan nama prodi yang lain!`
+        })
+    }
     await prodiModels.addProdi(body)
     res.status(201).json({
         message : 'Tambah data prodi berhasil!',
@@ -69,6 +75,13 @@ const updateProdi = async(req, res) => {
         })
     }
     try {
+        const prodiAda = await prodiModels.getProdiByName(body.nama, id)
+        if(prodiAda.length > 0){
+            res.status(404).json({
+                message: `Prodi dengan nama ${body.nama} sudah ada, silakan pilih nama lain.`,
+                data: null,
+            })
+        }
         await prodiModels.updateProdi(body, id)
         res.status(201).json({
             message : 'UPDATE prodi berhasil!',
@@ -88,6 +101,12 @@ const updateProdi = async(req, res) => {
 const deleteProdi = async(req,res) => {
     const {id} = req.params
     try {
+        const prodiAda = await prodiModels.getProdiById(id)
+        if(prodiAda.length === 0){
+            return res.status(404).json({
+                message: `Data prodi dengan ID:${id} tidak ditemukan!`
+            })
+        } 
         await prodiModels.deleteProdi(id)
         res.json({
             message : "Deleted prodi success!",
