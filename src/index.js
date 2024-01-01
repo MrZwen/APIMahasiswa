@@ -1,7 +1,6 @@
 require('dotenv').config()
 const PORT = process.env.PORT || 5000
-const HOST = '0.0.0.0'
-
+const HOST = process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0'
 const express = require('express')
 const mahasiswaRoutes = require('./routes/MahasiswaRoutes')
 const prodiRoutes = require('./routes/ProdiRoutes')
