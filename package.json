@@ -5,7 +5,6 @@
   "author": "Aditya Dharma & Wisnu Mahesa",
   "license": "MIT",
   "scripts": {
-    "start:prod": "NODE_ENV=production node ./src/index.js",
     "start": "nodemon src/index.js"
   },
   "dependencies": {

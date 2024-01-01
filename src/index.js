@@ -1,6 +1,6 @@
 require('dotenv').config();
 const http = require('http');
-const PORT = 5000;
+const PORT = PORT;
 const HOST = '0.0.0.0';
 const express = require('express');
 const mahasiswaRoutes = require('./routes/MahasiswaRoutes');
